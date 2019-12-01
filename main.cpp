@@ -66,7 +66,7 @@ private:
 
 int main()
 {
-    // just excample of usage
+    // just an example of usage
 
     
     HashTable<std::string, int> table(11);  
