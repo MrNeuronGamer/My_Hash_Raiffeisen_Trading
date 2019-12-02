@@ -1,5 +1,5 @@
 ////////////////////////////////////////////
-//// Author:    Khoroshilov Dmitrii     ////
+//// Autor:     Khoroshilov Dmitrii     ////
 //// Name:      Raiffeisen Assignment   ////
 //// Version:   1.0.3                   ////
 ////////////////////////////////////////////
@@ -7,7 +7,7 @@
 
 #include <functional>
 #include <iostream>
-#include <string>                 // is used for test purposes only, may be got rid of
+#include <string> 
 
 template<class TKey,class TValue>
 class HashTable
@@ -18,9 +18,9 @@ public:
 
     bool    push(TKey key, TValue value);       // Hashes new key and value , returns true if success, false otherwise
     bool    remove(TKey key);                   // Deletes a node with key = key , returns true if success, false otherwise
-    bool    search(TKey key) const;             // Looks for an object with a key = key, returns true if success, false otherwise
+    bool    search(TKey key) const;             // Looks for object with key = key, returns true if success, false otherwise
     
-    HashTable(size_t Limits);                   // Creates a new Hash Table with initial capacity size = Limits.
+    HashTable(size_t Limits);                   // Creates new Hash Table with initial capacity size = Limits.
     ~HashTable();
 
 
@@ -36,9 +36,10 @@ private:
 
     public:
 
-        TKey key;                                // Object's key
+        TKey key;                                // Objects key
         TValue value;                            // Associated value
         HObject* Next;                           // Next node pointer
+        bool deleted;
 
          HObject();
         ~HObject();
@@ -52,8 +53,8 @@ private:
     HObject** Table;                            // Table itself
     HObject*  AllowedObjects;                   // Special Objects' range for usage
 
-    size_t HashFunction(TKey obj, size_t SizeLimit) const;      // Hash Function to be used for hashing, takes a key, Capacity limits and returns a hash
-    void ReHash();                                              // Function for rehashing, gets used whenever extending of a capacity is required. Sets a new capacity equal to 3 times former capacity
+    size_t HashFunction(TKey obj, size_t SizeLimit) const;      // Hash Function to be used for hashing, takes a key, Capacity limits and returns hash
+    void ReHash();                                              // Function for rehashing, gets used whenever extending of capacity is required. Sets new capacity equal to 3 times former capacity
 
     
 
@@ -66,14 +67,21 @@ private:
 
 int main()
 {
-    // just an example of usage
+    // just excample of usage
 
     
     HashTable<std::string, int> table(11);  
 
     table.push("RaiffeisenNumberOne", 101);
     int a; 
-
+    table.push("RaiffeisenNumberïïOne", 101);
+    std::cin >> a;
+    table.push("RaifûâàfeisenNumberOne", 101);
+    std::cin >> a;
+    table.push("RaiffeicvdfgsenNumberOne", 101);
+    std::cin >> a;
+    table.push("RaifghfgfeisenNumberOne", 101);
+    std::cin >> a;
     std::cout << table.search("RaiffeisenNumberOne");
     std::cin >> a;
 
@@ -184,6 +192,7 @@ bool HashTable<TKey, TValue>::remove(TKey key)
 
         if (conductor->key == key)
         {
+            conductor->deleted = true;
             Table[searching_pos] = conductor->Next;
             return true;
         }
@@ -192,7 +201,7 @@ bool HashTable<TKey, TValue>::remove(TKey key)
         {
             conductor = conductor->Next;
         }
-
+        conductor->Next->deleted = true;
         conductor->Next = (conductor->Next)->Next;
         
 
@@ -278,6 +287,7 @@ void HashTable<TKey, TValue>::ReHash()
 
     for (size_t i = 0; i < StoredOLD; i++)
     {        
+        if (buffer[i].deleted) continue;
         this->push(buffer[i]);
     }
 
@@ -297,7 +307,7 @@ void HashTable<TKey, TValue>::ReHash()
 template<class TKey, class TValue>
 HashTable<TKey, TValue>::HObject::HObject()
 {
-   
+    deleted = false;
     Next = NULL;
 
 }
@@ -311,7 +321,7 @@ HashTable<TKey, TValue>::HObject::~HObject()
 template<class TKey, class TValue>
 void HashTable<TKey, TValue>::HObject::operator=(const HObject & A)
 {
-
+    deleted = A.deleted;
     key = A.key;
     value = A.value;
     Next = NULL;
