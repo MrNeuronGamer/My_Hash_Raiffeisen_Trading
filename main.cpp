@@ -1,5 +1,5 @@
 ////////////////////////////////////////////
-//// Autor:     Khoroshilov Dmitrii     ////
+//// Author:    Khoroshilov Dmitrii     ////
 //// Name:      Raiffeisen Assignment   ////
 //// Version:   1.0.3                   ////
 ////////////////////////////////////////////
@@ -7,7 +7,7 @@
 
 #include <functional>
 #include <iostream>
-#include <string> 
+#include <string>                 // is used for test purposes only, may be got rid of
 
 template<class TKey,class TValue>
 class HashTable
